@@ -1,5 +1,11 @@
 #!/usr/bin/env python
-"""One-off script to test the Ollama wrapper with a specific local model."""
+"""One-off script to test the Ollama wrapper with a specific local model.
+
+This script is intentionally named as a demo and not a pytest test so
+it won't be collected by pytest during test discovery. Run it manually:
+
+    python scripts/gpt_oss_demo.py
+"""
 import os
 import sys
 
@@ -21,19 +27,20 @@ except Exception:
     print("Could not import Ollama wrapper")
     raise
 
-llm = OllamaLLM(model=MODEL)
-print("HAS_CALL" if hasattr(llm, "__call__") else "NO_CALL")
-try:
-    if hasattr(llm, "__call__"):
-        out = llm("Say hello in one sentence.")
-    else:
-        out = llm._call("Say hello in one sentence.")
-    print("OUTPUT_START")
-    print(out)
-    print("OUTPUT_END")
-except Exception:
-    print("CALL FAILED:")
-    import traceback
+if __name__ == "__main__":
+    llm = OllamaLLM(model=MODEL)
+    print("HAS_CALL" if hasattr(llm, "__call__") else "NO_CALL")
+    try:
+        if hasattr(llm, "__call__"):
+            out = llm("Say hello in one sentence.")
+        else:
+            out = llm._call("Say hello in one sentence.")
+        print("OUTPUT_START")
+        print(out)
+        print("OUTPUT_END")
+    except Exception:
+        print("CALL FAILED:")
+        import traceback
 
-    traceback.print_exc()
-    raise
+        traceback.print_exc()
+        raise
