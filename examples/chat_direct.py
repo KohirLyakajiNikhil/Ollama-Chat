@@ -13,7 +13,7 @@ except Exception:
     print("Please install the 'ollama' python package: pip install ollama")
     raise
 
-MODEL = os.environ.get("OLLAMA_MODEL", "llama2")
+MODEL = os.environ.get("OLLAMA_MODEL", "gemma3:270m")
 
 
 def simple_chat(prompt: str) -> str:
