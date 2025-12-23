@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "langchain-ollama-chat"
+version = "0.1.0"
+description = "LangChain application using local Ollama chat models"
+authors = ["Your Name <you@example.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+langchain = "^0.1.0"
+ollama = "^0.0.5"
+fastapi = "^0.95.0"
+uvicorn = "^0.22.0"
+python-dotenv = "^1.0.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
