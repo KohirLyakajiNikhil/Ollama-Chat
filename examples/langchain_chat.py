@@ -18,11 +18,13 @@ _lc_import_errors = []
 # Try multiple import locations for LLMChain
 try:
     from langchain.chains import LLMChain  # type: ignore
+
     HAVE_LANGCHAIN = True
 except Exception as exc:
     _lc_import_errors.append(exc)
     try:
         from langchain import LLMChain  # type: ignore
+
         HAVE_LANGCHAIN = True
     except Exception as exc2:
         _lc_import_errors.append(exc2)
@@ -30,11 +32,13 @@ except Exception as exc:
 # Try multiple import locations for PromptTemplate
 try:
     from langchain.prompts import PromptTemplate  # type: ignore
+
     HAVE_LANGCHAIN = True
 except Exception as exc:
     _lc_import_errors.append(exc)
     try:
         from langchain import PromptTemplate  # type: ignore
+
         HAVE_LANGCHAIN = True
     except Exception as exc2:
         _lc_import_errors.append(exc2)
@@ -52,12 +56,15 @@ def run_example():
 
     # If LangChain's LLM base isn't available, fall back to a simple loop that
     # calls the Ollama wrapper directly (it is callable and returns text).
-    if 'HAVE_LANGCHAIN' in globals() and HAVE_LANGCHAIN:
-        prompt = PromptTemplate.from_template("You are a helpful assistant. User: {input}")
+    if "HAVE_LANGCHAIN" in globals() and HAVE_LANGCHAIN:
+        prompt = PromptTemplate.from_template(
+            "You are a helpful assistant. User: {input}"
+        )
         chain = LLMChain(llm=llm, prompt=prompt)
 
         def _run_input(text: str) -> str:
             return chain.run(text)
+
     else:
         print(
             "LangChain's LLMChain/PromptTemplate not available — falling back to direct OllamaLLM calls.\n"
