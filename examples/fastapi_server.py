@@ -15,7 +15,8 @@ from dotenv import load_dotenv
 from fastapi import FastAPI
 from pydantic import BaseModel
 
-from langchain_ollama.ollama_wrapper import OllamaLLM  # noqa: E402
+# Import local `langchain_ollama` lazily inside `_get_llm()` to avoid modifying
+# sys.path at module import time and to keep flake8 happy.
 
 # Load environment variables from .env at repository root (optional)
 load_dotenv()
@@ -33,6 +34,15 @@ def _get_llm():
                 "OLLAMA_MODEL not set. Copy .env.example to .env and set "
                 "OLLAMA_MODEL to your model name."
             )
+        # Import lazily and retry once if necessary so examples work without an
+        # editable install.
+        try:
+            from langchain_ollama.ollama_wrapper import OllamaLLM
+        except Exception:
+            repo_root = os.path.dirname(os.path.dirname(__file__))
+            sys.path.insert(0, os.path.join(repo_root, "src"))
+            from langchain_ollama.ollama_wrapper import OllamaLLM
+
         llm = OllamaLLM(model=MODEL)
     return llm
 

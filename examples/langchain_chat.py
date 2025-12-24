@@ -14,7 +14,10 @@ repo_root = os.path.dirname(os.path.dirname(__file__))
 sys.path.insert(0, os.path.join(repo_root, "src"))
 
 from dotenv import load_dotenv
-from langchain_ollama.ollama_wrapper import OllamaLLM  # noqa: E402
+
+# Import the local package lazily inside the example function so example scripts
+# can be run directly without requiring an editable install. This avoids modifying
+# sys.path at module import time and prevents flake8 E402 errors.
 
 # LangChain import compatibility across versions — do not raise on failure.
 HAVE_LANGCHAIN = False
@@ -63,6 +66,15 @@ def run_example():
             "OLLAMA_MODEL to your model name, then re-run this example."
         )
         return
+
+    # Import locally so running examples directly works without an editable
+    # install. If the import fails, add `src/` to sys.path and retry once.
+    try:
+        from langchain_ollama.ollama_wrapper import OllamaLLM
+    except Exception:
+        repo_root = os.path.dirname(os.path.dirname(__file__))
+        sys.path.insert(0, os.path.join(repo_root, "src"))
+        from langchain_ollama.ollama_wrapper import OllamaLLM
 
     llm = OllamaLLM(model=MODEL)
 

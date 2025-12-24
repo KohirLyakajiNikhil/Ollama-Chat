@@ -12,7 +12,9 @@ repo_root = os.path.dirname(os.path.dirname(__file__))
 sys.path.insert(0, os.path.join(repo_root, "src"))
 
 from dotenv import load_dotenv
-from langchain_ollama.ollama_wrapper import OllamaLLM  # noqa: E402
+
+# Import local package lazily inside the example functions to avoid modifying
+# sys.path at import time and to keep flake8 happy.
 
 # Load environment variables from .env at repository root (optional)
 load_dotenv()
@@ -27,6 +29,15 @@ def direct_example():
             "OLLAMA_MODEL to your model name, then re-run this example."
         )
         return
+
+    # Import locally so running examples directly works without an editable
+    # install. If the import fails, add `src/` to sys.path and retry once.
+    try:
+        from langchain_ollama.ollama_wrapper import OllamaLLM
+    except Exception:
+        repo_root = os.path.dirname(os.path.dirname(__file__))
+        sys.path.insert(0, os.path.join(repo_root, "src"))
+        from langchain_ollama.ollama_wrapper import OllamaLLM
 
     llm = OllamaLLM(model=model)
     resp = (
