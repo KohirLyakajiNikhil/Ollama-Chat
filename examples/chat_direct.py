@@ -18,6 +18,15 @@ except Exception:
     print("Please install the 'ollama' python package: pip install ollama")
     raise
 
+# Helper to extract assistant text when the client returns verbose objects
+try:
+    from langchain_ollama.ollama_wrapper import _extract_assistant_content
+except Exception:
+    # If local package isn't installed, attempt to add src/ and retry
+    repo_root = os.path.dirname(os.path.dirname(__file__))
+    sys.path.insert(0, os.path.join(repo_root, "src"))
+    from langchain_ollama.ollama_wrapper import _extract_assistant_content
+
 MODEL = os.environ.get("OLLAMA_MODEL")
 
 
@@ -35,21 +44,17 @@ def simple_chat(prompt: str) -> str:
     # Try to use top-level client if available
     if hasattr(ollama, "chat"):
         resp = ollama.chat(MODEL, messages=[{"role": "user", "content": prompt}])
-        return getattr(resp, "content", resp)
+        return str(_extract_assistant_content(resp))
 
     # Try client object
     if hasattr(ollama, "Ollama"):
         client = ollama.Ollama()
         if hasattr(client, "chat"):
             resp = client.chat(MODEL, messages=[{"role": "user", "content": prompt}])
-            return (
-                resp.get("content")
-                if isinstance(resp, dict)
-                else getattr(resp, "content", resp)
-            )
+            return str(_extract_assistant_content(resp))
         if hasattr(client, "predict"):
             resp = client.predict(MODEL, prompt)
-            return getattr(resp, "content", resp)
+            return str(_extract_assistant_content(resp))
 
     raise RuntimeError(
         "Could not find a compatible Ollama client API."
