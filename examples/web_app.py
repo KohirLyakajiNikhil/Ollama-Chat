@@ -1,15 +1,14 @@
-from dotenv import load_dotenv
-
-load_dotenv()
 
 import os
 import sys
-
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = FastAPI(title="Ollama Web Chat")
 
