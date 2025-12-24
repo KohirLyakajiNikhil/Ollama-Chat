@@ -213,6 +213,7 @@ if LC_HAS_LLM:
 
         def _call(self, prompt: str, stop: Optional[List[str]] = None) -> str:
             # Prefer the Python client if available
+            resp = None
             if FROM_OLLAMA:
                 try:
                     if hasattr(ollama, "chat"):
@@ -221,7 +222,6 @@ if LC_HAS_LLM:
                             messages=[{"role": "user", "content": prompt}],
                             **(self.ollama_kwargs or {}),
                         )
-                        return getattr(resp, "content", resp)
                     elif hasattr(ollama, "Ollama"):
                         client = ollama.Ollama()
                         if hasattr(client, "chat"):
@@ -230,27 +230,33 @@ if LC_HAS_LLM:
                                 messages=[{"role": "user", "content": prompt}],
                                 **(self.ollama_kwargs or {}),
                             )
-                            return (
-                                resp.get("content")
-                                if isinstance(resp, dict)
-                                else getattr(resp, "content", resp)
-                            )
                         elif hasattr(client, "predict"):
                             resp = client.predict(
                                 self.model, prompt, **(self.ollama_kwargs or {})
                             )
-                            return getattr(resp, "content", resp)
                         else:
-                            # fall through to CLI fallback
-                            pass
+                            resp = None
                 except Exception as e:
-                    # try CLI fallback
+                    # Try CLI fallback
                     try:
                         return _call_ollama_cli(self.model, prompt)
                     except Exception:
                         raise OllamaClientError(
                             f"Error using Ollama Python client: {e}"
                         )
+
+                # If we got a response from the Python client, extract assistant text
+                if resp is not None:
+                    try:
+                        return str(_extract_assistant_content(resp))
+                    except Exception:
+                        # Fall back to CLI on unexpected parsing errors
+                        try:
+                            return _call_ollama_cli(self.model, prompt)
+                        except Exception as e:
+                            raise OllamaClientError(
+                                f"Error extracting response from Ollama client: {e}"
+                            )
 
             # Fallback to CLI
             return _call_ollama_cli(self.model, prompt)
@@ -282,6 +288,7 @@ else:
 
         def generate_text(self, prompt: str) -> str:
             # Try the Python client
+            resp = None
             if FROM_OLLAMA:
                 try:
                     if hasattr(ollama, "chat"):
@@ -290,7 +297,6 @@ else:
                             messages=[{"role": "user", "content": prompt}],
                             **(self.ollama_kwargs or {}),
                         )
-                        return getattr(resp, "content", resp)
                     elif hasattr(ollama, "Ollama"):
                         client = ollama.Ollama()
                         if hasattr(client, "chat"):
@@ -299,19 +305,20 @@ else:
                                 messages=[{"role": "user", "content": prompt}],
                                 **(self.ollama_kwargs or {}),
                             )
-                            return (
-                                resp.get("content")
-                                if isinstance(resp, dict)
-                                else getattr(resp, "content", resp)
-                            )
                         elif hasattr(client, "predict"):
                             resp = client.predict(
                                 self.model, prompt, **(self.ollama_kwargs or {})
                             )
-                            return getattr(resp, "content", resp)
                 except Exception:
                     # Fallthrough to CLI fallback
                     pass
+
+                if resp is not None:
+                    try:
+                        return str(_extract_assistant_content(resp))
+                    except Exception:
+                        # Fall back to CLI on unexpected parsing errors
+                        return _call_ollama_cli(self.model, prompt)
 
             # CLI fallback
             return _call_ollama_cli(self.model, prompt)
