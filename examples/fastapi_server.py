@@ -7,15 +7,15 @@ Run:
 import os
 import sys
 
-from dotenv import load_dotenv
-from fastapi import FastAPI
-from pydantic import BaseModel
-
 # Ensure local package import works when running examples directly
 repo_root = os.path.dirname(os.path.dirname(__file__))
 sys.path.insert(0, os.path.join(repo_root, "src"))
 
-from langchain_ollama.ollama_wrapper import OllamaLLM
+from dotenv import load_dotenv
+from fastapi import FastAPI
+from pydantic import BaseModel
+
+from langchain_ollama.ollama_wrapper import OllamaLLM  # noqa: E402
 
 # Load environment variables from .env at repository root (optional)
 load_dotenv()
