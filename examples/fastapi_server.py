@@ -16,8 +16,19 @@ from langchain_ollama.ollama_wrapper import OllamaLLM
 load_dotenv()
 
 app = FastAPI()
-MODEL = os.environ.get("OLLAMA_MODEL", "llama2")
-llm = OllamaLLM(model=MODEL)
+MODEL = os.environ.get("OLLAMA_MODEL")
+llm = None
+
+
+def _get_llm():
+    global llm
+    if llm is None:
+        if not MODEL:
+            raise RuntimeError(
+                "OLLAMA_MODEL not set. Copy .env.example to .env and set OLLAMA_MODEL to your model name."
+            )
+        llm = OllamaLLM(model=MODEL)
+    return llm
 
 
 class Message(BaseModel):

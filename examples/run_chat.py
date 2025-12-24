@@ -16,7 +16,13 @@ load_dotenv()
 
 def direct_example():
     print("Direct example:")
-    model = os.environ.get("OLLAMA_MODEL", "test-model")
+    model = os.environ.get("OLLAMA_MODEL")
+    if not model:
+        print(
+            "OLLAMA_MODEL is not set. Copy .env.example to .env and set OLLAMA_MODEL to your model name, then re-run this example."
+        )
+        return
+
     llm = OllamaLLM(model=model)
     resp = (
         llm._call("Say hello in one sentence.")

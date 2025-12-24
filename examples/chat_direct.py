@@ -13,7 +13,14 @@ except Exception:
     print("Please install the 'ollama' python package: pip install ollama")
     raise
 
-MODEL = os.environ.get("OLLAMA_MODEL", "gemma3:270m")
+MODEL = os.environ.get("OLLAMA_MODEL")
+
+
+def _require_model():
+    if not MODEL:
+        raise RuntimeError(
+            "OLLAMA_MODEL not set. Copy .env.example to .env and set OLLAMA_MODEL to your local Ollama model name."
+        )
 
 
 def simple_chat(prompt: str) -> str:

@@ -49,10 +49,16 @@ for name, attr in [
 # Load environment variables from .env at repository root (optional)
 load_dotenv()
 
-MODEL = os.environ.get("OLLAMA_MODEL", "llama2")
+MODEL = os.environ.get("OLLAMA_MODEL")
 
 
 def run_example():
+    if not MODEL:
+        print(
+            "OLLAMA_MODEL is not set. Copy .env.example to .env and set OLLAMA_MODEL to your model name, then re-run this example."
+        )
+        return
+
     llm = OllamaLLM(model=MODEL)
 
     # If LangChain's LLM base isn't available, fall back to a simple loop that
