@@ -19,7 +19,8 @@ MODEL = os.environ.get("OLLAMA_MODEL")
 def _require_model():
     if not MODEL:
         raise RuntimeError(
-            "OLLAMA_MODEL not set. Copy .env.example to .env and set OLLAMA_MODEL to your local Ollama model name."
+            "OLLAMA_MODEL not set. Copy .env.example to .env and set "
+            "OLLAMA_MODEL to your local Ollama model name."
         )
 
 

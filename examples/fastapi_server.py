@@ -25,7 +25,8 @@ def _get_llm():
     if llm is None:
         if not MODEL:
             raise RuntimeError(
-                "OLLAMA_MODEL not set. Copy .env.example to .env and set OLLAMA_MODEL to your model name."
+                "OLLAMA_MODEL not set. Copy .env.example to .env and set "
+                "OLLAMA_MODEL to your model name."
             )
         llm = OllamaLLM(model=MODEL)
     return llm

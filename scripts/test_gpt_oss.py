@@ -21,7 +21,8 @@ sys.path.insert(0, os.path.join(repo_root, "src"))
 MODEL = os.environ.get("OLLAMA_MODEL")
 if not MODEL:
     print(
-        "OLLAMA_MODEL is not set. Copy .env.example to .env and set OLLAMA_MODEL to your model name, then re-run this demo."
+        "OLLAMA_MODEL is not set. Copy .env.example to .env and set "
+        "OLLAMA_MODEL to your model name, then re-run this demo."
     )
     sys.exit(2)
 print("Using MODEL=", MODEL)

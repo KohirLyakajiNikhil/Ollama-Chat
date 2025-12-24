@@ -19,7 +19,8 @@ def direct_example():
     model = os.environ.get("OLLAMA_MODEL")
     if not model:
         print(
-            "OLLAMA_MODEL is not set. Copy .env.example to .env and set OLLAMA_MODEL to your model name, then re-run this example."
+            "OLLAMA_MODEL is not set. Copy .env.example to .env and set "
+            "OLLAMA_MODEL to your model name, then re-run this example."
         )
         return
 
