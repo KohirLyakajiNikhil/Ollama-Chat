@@ -35,21 +35,20 @@ def run_example():
     llm = OllamaLLM(model=model)
     print("Contextual LangChain chat agent. Type 'exit' to quit.")
     history = []  # List of (user, assistant) message tuples
-    prompt = PromptTemplate.from_template("""{context}Assistant:""")
+    prompt = PromptTemplate.from_template("""{context}User: {user_input}\nAssistant:""")
     while True:
         user_input = input("User: ")
         if user_input.strip().lower() in ("exit", "quit"):
             break
         history.append(("user", user_input))
-        # Build context string
+        # Build context string for this session
         context = ""
         for role, msg in history:
             if role == "user":
                 context += f"User: {msg}\n"
             else:
                 context += f"Assistant: {msg}\n"
-        # Compose prompt with context using PromptTemplate
-        prompt_text = prompt.format(context=context)
+        prompt_text = prompt.format(context=context, user_input=user_input)
         out = llm(prompt_text)
         print("Model:", out)
         history.append(("assistant", out))

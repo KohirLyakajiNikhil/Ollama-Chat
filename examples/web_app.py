@@ -70,11 +70,14 @@ async def chat_endpoint(
     OllamaLLM = _import_wrapper()
     try:
         llm = OllamaLLM(model=model, base_url=os.environ.get("OLLAMA_BASE_URL"))
-        # Use conversation history for context
-        prompt_text = "\n".join([
-            f"User: {u}\nAssistant: {a}" if a else f"User: {u}"
-            for u, a in history if u == "user" or a
-        ])
+        # Build context string for this session
+        context = ""
+        for role, message in history:
+            if role == "user":
+                context += f"User: {message}\n"
+            else:
+                context += f"Assistant: {message}\n"
+        prompt_text = context + "Assistant:"
         out = llm(prompt_text)
         history.append(("assistant", out))
         return JSONResponse({"reply": out})
