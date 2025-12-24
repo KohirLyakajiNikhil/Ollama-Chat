@@ -1,6 +1,7 @@
 """Direct example showing how to call an Ollama chat model without LangChain."""
 
 import os
+import sys
 
 from dotenv import load_dotenv
 
@@ -25,6 +26,8 @@ def _require_model():
 
 
 def simple_chat(prompt: str) -> str:
+    _require_model()
+
     # Try to use top-level client if available
     if hasattr(ollama, "chat"):
         resp = ollama.chat(MODEL, messages=[{"role": "user", "content": prompt}])
@@ -51,6 +54,12 @@ def simple_chat(prompt: str) -> str:
 
 
 if __name__ == "__main__":
+    try:
+        _require_model()
+    except RuntimeError as e:
+        print(e)
+        sys.exit(2)
+
     print("Direct Ollama chat demo. Type 'exit' to quit.")
     while True:
         prompt = input("User: ")
