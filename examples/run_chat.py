@@ -35,11 +35,19 @@ def direct_example():
 
 def langchain_example():
     print("\nLangChain example:")
+    model = os.environ.get("OLLAMA_MODEL")
+    if not model:
+        print(
+            "OLLAMA_MODEL is not set. Copy .env.example to .env and set "
+            "OLLAMA_MODEL to your model name, then re-run this example."
+        )
+        return
+
     try:
         from langchain import LLMChain, PromptTemplate
 
         # Some LangChain versions expect the model to follow their LLM base API
-        llm = OllamaLLM(model="test-model")
+        llm = OllamaLLM(model=model)
         prompt = PromptTemplate("{input}", input_variables=["input"])
         chain = LLMChain(llm=llm, prompt=prompt)
         prompt_text = "Write a short haiku about coding."

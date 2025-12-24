@@ -39,14 +39,19 @@ class Message(BaseModel):
 @app.post("/chat")
 async def chat(msg: Message):
     # The wrapper exposes a simple interface; it may be an LLM object or callable
-    if hasattr(llm, "__call__"):
-        text = llm(msg.text)
-    elif hasattr(llm, "generate_text"):
-        text = llm.generate_text(msg.text)
+    try:
+        local_llm = _get_llm()
+    except RuntimeError as e:
+        return {"error": str(e)}
+
+    if hasattr(local_llm, "__call__"):
+        text = local_llm(msg.text)
+    elif hasattr(local_llm, "generate_text"):
+        text = local_llm.generate_text(msg.text)
     else:
         # try to call generate via LangChain API
         try:
-            text = llm._call(msg.text)
+            text = local_llm._call(msg.text)
         except Exception as e:
             return {"error": str(e)}
     return {"reply": text}
@@ -60,12 +65,17 @@ async def health():
     """
     probe = os.environ.get("OLLAMA_HEALTH_PROMPT", "Say hi in one sentence.")
     try:
-        if hasattr(llm, "__call__"):
-            out = llm(probe)
-        elif hasattr(llm, "generate_text"):
-            out = llm.generate_text(probe)
+        local_llm = _get_llm()
+    except RuntimeError as e:
+        return {"ok": False, "model": MODEL, "error": str(e)}
+
+    try:
+        if hasattr(local_llm, "__call__"):
+            out = local_llm(probe)
+        elif hasattr(local_llm, "generate_text"):
+            out = local_llm.generate_text(probe)
         else:
-            out = llm._call(probe)
+            out = local_llm._call(probe)
         return {
             "ok": True,
             "model": MODEL,
