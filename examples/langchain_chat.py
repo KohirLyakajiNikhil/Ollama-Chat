@@ -7,8 +7,13 @@ this may work out-of-the-box or require small API adjustments.
 
 import importlib
 import os
+import sys
 
 from dotenv import load_dotenv
+
+# Ensure local package import works when running examples directly
+repo_root = os.path.dirname(os.path.dirname(__file__))
+sys.path.insert(0, os.path.join(repo_root, "src"))
 
 from langchain_ollama.ollama_wrapper import OllamaLLM
 

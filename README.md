@@ -24,6 +24,9 @@ python -m venv .venv
 # Git Bash / WSL:
 # source .venv/bin/activate
 pip install -r requirements.txt
+# (Optional for local development) Install the package in editable mode so examples
+# can import the local package without adjusting PYTHONPATH:
+python -m pip install -e .
 ```
 
 Quick check: run `python -c "import sys; print(sys.prefix)"` — it should show the `.venv` path when the venv is active.

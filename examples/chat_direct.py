@@ -8,6 +8,10 @@ from dotenv import load_dotenv
 # Load environment variables from .env at repository root (optional)
 load_dotenv()
 
+# Ensure local package import works when running examples directly
+repo_root = os.path.dirname(os.path.dirname(__file__))
+sys.path.insert(0, os.path.join(repo_root, "src"))
+
 try:
     import ollama
 except Exception:
