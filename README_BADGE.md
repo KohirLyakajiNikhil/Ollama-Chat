@@ -1,4 +1,4 @@
-![CI](https://github.com/<owner>/<repo>/actions/workflows/ci.yml/badge.svg?branch=main)
+![CI](https://github.com/KohirLyakajiNikhil/Ollama-Chat/actions/workflows/ci.yml/badge.svg?branch=main)
 
 # LangChain + Ollama Example
 
@@ -6,7 +6,10 @@ This repository demonstrates how to use locally installed Ollama models with Lan
 
 Key contents
 - `src/langchain_ollama/ollama_wrapper.py` — LangChain-compatible `OllamaLLM` wrapper with Python client and CLI fallbacks.
-- `examples/run_chat.py` — Minimal examples for direct usage and LangChain integration.
+- `examples/run_chat.py` — Convenience script that runs a quick direct and LangChain example.
+- `examples/chat_direct.py` — Direct usage example invoking the `OllamaLLM` wrapper interactively.
+- `examples/langchain_chat.py` — Example showing a minimal LangChain integration using the wrapper.
+- `examples/fastapi_server.py` — FastAPI example exposing a `/health` endpoint to probe model availability.
 - `tests/` — pytest tests that mock the Ollama client and the CLI fallback.
 
 Quickstart

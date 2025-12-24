@@ -1,3 +1,5 @@
+![CI](https://github.com/KohirLyakajiNikhil/Ollama-Chat/actions/workflows/ci.yml/badge.svg?branch=main)
+
 # LangChain + Ollama Chat Demo ✅
 
 This repository contains a small Python project that demonstrates how to use chat models installed in Ollama locally from a LangChain application.
@@ -45,7 +47,7 @@ OLLAMA_MODEL=llama2
 Bootstrap helper scripts
 
 - A convenience script is provided to create the venv (if missing) and install requirements into it:
-  - PowerShell: `scripts\bootstrap.ps1` — runs with `.\	emplates\scripts\bootstrap.ps1` or `powershell -File .\scripts\bootstrap.ps1` (you may want to allow script execution for the session first as described above)
+  - PowerShell: `scripts\bootstrap.ps1` — run `.\scripts\bootstrap.ps1` or `powershell -File .\scripts\bootstrap.ps1` (you may want to allow script execution for the session first as described above)
   - Bash (WSL / Git Bash / macOS / Linux): `scripts/bootstrap.sh` — run `./scripts/bootstrap.sh` (add `--dev` to also install dev requirements)
 
 Preflight check
@@ -141,7 +143,9 @@ python scripts/health_check.py
 ```
 uvicorn examples.fastapi_server:app --reload
 # Then visit http://127.0.0.1:8000/health
-```
+```# Known issues / model guidance
+- Large models (for example `gpt-oss:latest`) may require substantially more RAM than typical desktop machines (e.g., >12 GB). If a model fails to load, try a smaller model, a quantized variant, or verify the model health first with `python scripts/health_check.py`.
+- Ollama's CLI and Python client APIs can vary between releases; if you encounter API errors, check `src/langchain_ollama/ollama_wrapper.py` for compatibility workarounds.
 Contributions
 - PRs welcome: add more robust LangChain chat model implementations, FastAPI demo, or tests.
 
