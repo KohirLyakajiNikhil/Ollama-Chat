@@ -7,10 +7,6 @@ Run:
 import os
 import sys
 
-# Ensure local package import works when running examples directly
-repo_root = os.path.dirname(os.path.dirname(__file__))
-sys.path.insert(0, os.path.join(repo_root, "src"))
-
 from dotenv import load_dotenv
 from fastapi import FastAPI
 from pydantic import BaseModel
