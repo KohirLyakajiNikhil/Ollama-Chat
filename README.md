@@ -6,6 +6,52 @@
 
 You can chat with your local Ollama model in your browser using the included web app.
 
+
+### Prerequisites
+
+#### 1. Install Ollama
+
+- **Ubuntu:**
+  ```bash
+  curl -fsSL https://ollama.com/install.sh | sh
+  # Start the Ollama service
+  ollama serve &
+  # Pull a model (example: llama2)
+  ollama pull llama2
+  ```
+
+- **Windows:**
+  1. Download the Windows installer from: https://ollama.com/download
+  2. Run the installer and follow the prompts.
+  3. Open a new terminal and run:
+     ```powershell
+     ollama serve
+     # Pull a model (example: llama2)
+     ollama pull llama2
+     ```
+
+#### 2. Install Python and Create a Virtual Environment
+
+- **Ubuntu:**
+  ```bash
+  sudo apt update
+  sudo apt install python3 python3-venv python3-pip -y
+  python3 -m venv .venv
+  source .venv/bin/activate
+  ```
+
+- **Windows (PowerShell):**
+  ```powershell
+  # Ensure Python 3.10+ is installed (https://www.python.org/downloads/)
+  python -m venv .venv
+  .\.venv\Scripts\Activate.ps1
+  # If you see a script execution error, run:
+  Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned
+  .\.venv\Scripts\Activate.ps1
+  ```
+
+---
+
 ### Quick Start
 
 1. **Install dependencies** (see above for venv instructions):
