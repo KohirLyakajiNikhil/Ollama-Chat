@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ollama Web Chat</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Ollama Web Chat</h1>
+    <div id="chat" class="chat"></div>
+    <div id="typing-indicator" class="typing" style="display:none;">Ollama is typing<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span></div>
+    <form id="chat-form" autocomplete="off">
+      <input id="message" autocomplete="off" placeholder="Type your message..." autofocus />
+      <button type="submit">Send</button>
+    </form>
+  </div>
+  <script src="/static/app.js"></script>
+</body>
+</html>

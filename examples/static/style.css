@@ -1,0 +1,21 @@
+body { font-family: 'Segoe UI', Arial, sans-serif; background: #f7fafc; color: #111827; }
+.container { max-width: 720px; margin: 48px auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 6px 18px rgba(15,23,42,0.08); }
+h1 { margin: 0 0 12px 0; font-size: 22px; letter-spacing: 1px; }
+.chat { height: 400px; overflow-y: auto; border: 1px solid #e5e7eb; padding: 16px; border-radius: 6px; background: #fafafa; margin-bottom: 8px; }
+.msg { display: flex; align-items: flex-end; margin: 12px 0; }
+.msg.user { flex-direction: row-reverse; }
+.msg .avatar { width: 36px; height: 36px; border-radius: 50%; background: #dbeafe; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px; margin: 0 0 0 10px; }
+.msg.user .avatar { background: #facc15; color: #fff; margin: 0 0 0 10px; }
+.msg.assistant .avatar { background: #2563eb; color: #fff; margin: 0 10px 0 0; }
+.bubble { max-width: 70%; padding: 12px 16px; border-radius: 18px; background: #e0e7ef; color: #111827; font-size: 16px; line-height: 1.5; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
+.msg.user .bubble { background: #2563eb; color: #fff; border-bottom-right-radius: 6px; border-bottom-left-radius: 18px; }
+.msg.assistant .bubble { background: #e0e7ef; color: #111827; border-bottom-left-radius: 6px; border-bottom-right-radius: 18px; }
+#chat-form { display: flex; gap: 8px; margin-top: 12px; }
+#message { flex: 1; padding: 10px 12px; border-radius: 6px; border: 1px solid #e5e7eb; font-size: 16px; }
+button { padding: 10px 18px; border-radius: 6px; border: none; background: #2563eb; color: white; font-size: 16px; cursor: pointer; transition: background 0.2s; }
+button:hover { background: #1d4ed8; }
+.typing { color: #64748b; font-size: 15px; margin: 8px 0 0 4px; display: flex; align-items: center; min-height: 24px; }
+.dot { animation: blink 1.2s infinite; opacity: 0.5; }
+.dot:nth-child(2) { animation-delay: 0.2s; }
+.dot:nth-child(3) { animation-delay: 0.4s; }
+@keyframes blink { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }

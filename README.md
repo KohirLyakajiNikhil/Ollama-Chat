@@ -1,6 +1,40 @@
 ![CI](https://github.com/KohirLyakajiNikhil/Ollama-Chat/actions/workflows/ci.yml/badge.svg?branch=main)
 
+
 # LangChain + Ollama Chat Demo ✅
+## 🖥️ Web Application (Browser Chat UI)
+
+You can chat with your local Ollama model in your browser using the included web app.
+
+### Quick Start
+
+1. **Install dependencies** (see above for venv instructions):
+  ```bash
+  pip install -r requirements.txt
+  python -m pip install -e .  # recommended for local dev
+  ```
+
+2. **Set your model** in `.env` or as an environment variable:
+  ```ini
+  OLLAMA_MODEL=your_model_name
+  ```
+  Example: `OLLAMA_MODEL=llama2` or any model you have installed in Ollama.
+
+3. **Run the web app:**
+  ```bash
+  uvicorn examples.web_app:app --reload
+  ```
+  Then open [http://127.0.0.1:8000/](http://127.0.0.1:8000/) in your browser.
+
+  - The chat UI supports avatars, message bubbles, a typing indicator, and works on desktop/mobile.
+  - If you see an error about `jinja2` missing, install it with `pip install jinja2`.
+
+4. **Troubleshooting:**
+  - Make sure the Ollama daemon is running and the model is installed.
+  - If you get a model error, check your `.env` or environment variable for `OLLAMA_MODEL`.
+  - For best results, use a smaller or quantized model if you have limited RAM.
+
+---
 
 This repository contains a small Python project that demonstrates how to use chat models installed in Ollama locally from a LangChain application.
 
@@ -62,6 +96,8 @@ python scripts/check_env.py
 ```
 
 It prints a JSON object listing any missing packages and a tip to run `python -m pip install -r requirements.txt` in the active venv.
+
+### Other Examples
 
 4. Run the direct chat example:
 
@@ -134,23 +170,29 @@ python -c "import sys; print(sys.prefix)"
 
 It should show the path to the `.venv` folder.
 
-Health check
+
+---
+
+## Health check
 - Use `scripts/health_check.py` to verify that the configured model (from `.env` or the `OLLAMA_MODEL` env var) is reachable and responding to a short probe. Example:
 
-```
-python scripts/health_check.py
-```
+  python scripts/health_check.py
 
-- FastAPI example now exposes a `/health` GET endpoint that returns a JSON object with `ok: true` when the model responds and `ok: false` with an error message if it does not. Example:
+- FastAPI example exposes a `/health` GET endpoint that returns a JSON object with `ok: true` when the model responds and `ok: false` with an error message if it does not. Example:
 
-```
-uvicorn examples.fastapi_server:app --reload
-# Then visit http://127.0.0.1:8000/health
-```# Known issues / model guidance
+  uvicorn examples.fastapi_server:app --reload
+  # Then visit http://127.0.0.1:8000/health
+
+---
+
+## Known issues / model guidance
 - Large models (for example `gpt-oss:latest`) may require substantially more RAM than typical desktop machines (e.g., >12 GB). If a model fails to load, try a smaller model, a quantized variant, or verify the model health first with `python scripts/health_check.py`.
 - Ollama's CLI and Python client APIs can vary between releases; if you encounter API errors, check `src/langchain_ollama/ollama_wrapper.py` for compatibility workarounds.
-Contributions
+
+---
+
+## Contributions
 - PRs welcome: add more robust LangChain chat model implementations, FastAPI demo, or tests.
 
-License
+## License
 - MIT
