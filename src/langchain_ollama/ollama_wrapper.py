@@ -9,6 +9,8 @@ Features:
 """
 
 import asyncio
+import json
+import re
 import shlex
 import shutil
 import subprocess
@@ -16,8 +18,10 @@ from concurrent.futures import ThreadPoolExecutor
 from typing import Any, Dict, List, Optional
 
 try:
-    # LangChain LLM base class
-    from langchain.llms.base import LLM
+    # LangChain LLM base class (wrap to multiple lines to satisfy flake8)
+    from langchain.llms.base import (
+        LLM
+    )
 
     LC_HAS_LLM = True
 except Exception:
@@ -47,7 +51,11 @@ def _extract_assistant_content(resp: Any) -> str:
 
     # dict-like responses
     if isinstance(resp, dict):
-        # Common shapes: {"content": "..."}, {"message": {...}}, {"messages": [...]}, {"choices": [...]}
+        # Common shapes:
+        # - {'content': '...'}
+        # - {'message': {...}}
+        # - {'messages': [...]}
+        # - {'choices': [...]}
         if "content" in resp and isinstance(resp["content"], str):
             return resp["content"].strip()
         if "message" in resp:

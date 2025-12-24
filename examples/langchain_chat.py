@@ -6,8 +6,10 @@ this may work out-of-the-box or require small API adjustments.
 """
 
 import os
+import importlib
 
 from dotenv import load_dotenv
+from langchain_ollama.ollama_wrapper import OllamaLLM
 
 # LangChain import compatibility across versions — do not raise on failure.
 HAVE_LANGCHAIN = False
@@ -15,35 +17,33 @@ LLMChain = None
 PromptTemplate = None
 _lc_import_errors = []
 
-# Try multiple import locations for LLMChain
-try:
-    from langchain.chains import LLMChain  # type: ignore
+# Try multiple import locations for LLMChain and PromptTemplate using importlib
 
-    HAVE_LANGCHAIN = True
-except Exception as exc:
-    _lc_import_errors.append(exc)
+for name, attr in [
+    ("langchain.chains", "LLMChain"),
+    ("langchain", "LLMChain"),
+]:
     try:
-        from langchain import LLMChain  # type: ignore
-
+        mod = importlib.import_module(name)
+        LLMChain = getattr(mod, attr)
         HAVE_LANGCHAIN = True
-    except Exception as exc2:
-        _lc_import_errors.append(exc2)
+        break
+    except Exception as exc:
+        _lc_import_errors.append(exc)
+        LLMChain = None
 
-# Try multiple import locations for PromptTemplate
-try:
-    from langchain.prompts import PromptTemplate  # type: ignore
-
-    HAVE_LANGCHAIN = True
-except Exception as exc:
-    _lc_import_errors.append(exc)
+for name, attr in [
+    ("langchain.prompts", "PromptTemplate"),
+    ("langchain", "PromptTemplate"),
+]:
     try:
-        from langchain import PromptTemplate  # type: ignore
-
+        mod = importlib.import_module(name)
+        PromptTemplate = getattr(mod, attr)
         HAVE_LANGCHAIN = True
-    except Exception as exc2:
-        _lc_import_errors.append(exc2)
-
-from langchain_ollama.ollama_wrapper import OllamaLLM
+        break
+    except Exception as exc:
+        _lc_import_errors.append(exc)
+        PromptTemplate = None
 
 # Load environment variables from .env at repository root (optional)
 load_dotenv()
@@ -67,8 +67,10 @@ def run_example():
 
     else:
         print(
-            "LangChain's LLMChain/PromptTemplate not available — falling back to direct OllamaLLM calls.\n"
-            "Install a compatible 'langchain' to use this example with LLMChain, or use 'examples/chat_direct.py'."
+            "LangChain's LLMChain/PromptTemplate not available — "
+            "falling back to direct OllamaLLM calls.\n"
+            "Install a compatible 'langchain' to use this example with LLMChain, "
+            "or use 'examples/chat_direct.py'."
         )
 
         def _run_input(text: str) -> str:
