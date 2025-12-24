@@ -92,11 +92,11 @@ def _extract_assistant_content(resp: Any) -> str:
     # "message=Message(role='assistant', content='Hello', ...)"
     try:
         s = str(resp)
-        # Try to find content='...'
-        m = re.search(r"content=\'([^']+)\'", s)
+        # Try to find content='...' or content="..." using a permissive regex
+        m = re.search(r"content\s*=\s*(['\"])(.*?)\1", s, re.DOTALL)
         if m:
-            return m.group(1).strip()
-        m2 = re.search(r'"content"\s*:\s*"([^"]+)"', s)
+            return m.group(2).strip()
+        m2 = re.search(r'"content"\s*:\s*"([^\"]+)"', s)
         if m2:
             return m2.group(1).strip()
         # As a last resort return the string
