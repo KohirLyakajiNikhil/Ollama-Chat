@@ -19,9 +19,7 @@ from typing import Any, Dict, List, Optional
 
 try:
     # LangChain LLM base class (wrap to multiple lines to satisfy flake8)
-    from langchain.llms.base import (
-        LLM
-    )
+    from langchain.llms.base import LLM
 
     LC_HAS_LLM = True
 except Exception:
