@@ -57,6 +57,14 @@ def langchain_example():
     try:
         from langchain import LLMChain, PromptTemplate
 
+        # Import OllamaLLM lazily so this example works without an editable install
+        try:
+            from langchain_ollama.ollama_wrapper import OllamaLLM
+        except Exception:
+            repo_root = os.path.dirname(os.path.dirname(__file__))
+            sys.path.insert(0, os.path.join(repo_root, "src"))
+            from langchain_ollama.ollama_wrapper import OllamaLLM
+
         # Some LangChain versions expect the model to follow their LLM base API
         llm = OllamaLLM(model=model)
         prompt = PromptTemplate("{input}", input_variables=["input"])
