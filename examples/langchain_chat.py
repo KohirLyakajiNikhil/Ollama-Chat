@@ -5,10 +5,11 @@ This example attempts to use LangChain's LLM base class wrapper defined in
 this may work out-of-the-box or require small API adjustments.
 """
 
-import os
 import importlib
+import os
 
 from dotenv import load_dotenv
+
 from langchain_ollama.ollama_wrapper import OllamaLLM
 
 # LangChain import compatibility across versions — do not raise on failure.
